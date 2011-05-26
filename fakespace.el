@@ -49,8 +49,9 @@
     lst))
 
 (defun atom-difference (a b)
-  "Like set-difference, but, for performance reaons, requires
-specially formed lists. Returns items that are in B and not A."
+  "Like set-difference, but, for performance reasons, requires
+specially formed lists (i.e. from `atom-list'). Returns items
+that are in B and not A."
   (let ((diff))
     (while (and (not (null a)) (not (null b)))
       (while (not (eq (car a) (car b)))

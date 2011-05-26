@@ -26,20 +26,18 @@ specially formed lists. Returns items that are in B and not A."
       (setq b (cdr b)))
     diff))
 
-(defvar old-obarray ()
-  "List of all the items from obarray at some previous time.")
+(lexical-let ((old-obarray ()))
+  (defmacro defpackage (name &rest args)
+    (dolist (arg args)
+      (let ((type (car arg)))
+	(cond ((eq type :exports) t) ; interning the symbols is enough
+	      ((eq type :use) (mapcar (lambda (s) (require s)) (cdr arg))))))
+    (setq old-obarray (atom-list))
+    `(provide (quote ,name)))
 
-(defmacro defpackage (name &rest args)
-  (dolist (arg args)
-    (let ((type (car arg)))
-      (cond ((eq type :exports) t)   ; interning the symbols is enough
-	    ((eq type :use) (mapcar (lambda (s) (require s)) (cdr arg))))))
-  (setq old-obarray (atom-list))
-  `(provide (quote ,name)))
-
-(defmacro end-package ()
-  (cons 'progn
-	(mapcar (lambda (s) `(unintern (quote ,s)))
-		(atom-difference old-obarray (atom-list)))))
+  (defmacro end-package ()
+    (cons 'progn
+	  (mapcar (lambda (s) `(unintern (quote ,s) nil))
+		  (atom-difference old-obarray (atom-list))))))
 
 (provide 'fakespace)

@@ -1,6 +1,6 @@
 (require 'fakespace)
 
-;; Start be declaring a package. `defpackage' currently supports :use
+;; Start by declaring a package. `defpackage' currently supports :use
 ;; and :export. Any libraries listed in :use will be `require'd. You
 ;; can make your own calls to require, but they should generally occur
 ;; *before* your `defpackage'. Otherwise the symbols defined in the
@@ -13,8 +13,8 @@
 ;; Caveat: any functions or variables you declare *will* be defined in
 ;; the main namespace (we're faking namespaces here), but the
 ;; non-exported symbols will be removed afterward. The same functions
-;; and variables can be redefined elsewhere without interfering with
-;; the definitions here.
+;; and variables can be redefined elsewhere outside this package
+;; without interfering with the definitions here.
 
 (defvar my-var 100
   "A hidden variable.")

@@ -4,6 +4,8 @@
 
 ;;; Commentary:
 
+;; See example.el for an example of using this package.
+
 ;; Provides fake namespaces through a very rudimentary `defpackage',
 ;; familiar to Common Lisp users. The developer declares which symbols
 ;; are to be exported outside the package. All other symbols are
@@ -27,7 +29,11 @@
 ;; not be loaded before compilation or the `defpackage' will not hide
 ;; any symbols.
 
-;; See example.el for an example of using this package.
+;; I still think it is possible to support `in-package' here. When
+;; symbols are uninterned, they could also be stored in a package
+;; symbol table. When switching packages, the old symbol table's
+;; symbols are uninterned and the new symbols are loaded in. I may add
+;; this in the future.
 
 ;;; Code:
 

@@ -1,11 +1,39 @@
 ;;; fakespace.el --- fake Emacs lisp namespaces
 
+;; This is free and unencumbered software released into the public domain.
+
+;;; Commentary:
+
+;; Provides fake namespaces through a very rudimentary `defpackage',
+;; familiar to Common Lisp users. The developer declares which symbols
+;; are to be exported outside the package. All other symbols are
+;; hidden away (by `end-package') where no other package can trample
+;; on them.
+
+;; It works by comparing the symbol table before any declarations to
+;; the symbol table afterward, then uninterning any symbols that were
+;; created and not exported. This will work even on byte-compiled
+;; files. In fact, everything is determined at compile-time, so there
+;; is practically no load-time penalty from using these fake
+;; namespaces.
+
+;; Generally you will not want to actively use these fake namespaces
+;; during development because there is no `in-package' function. You
+;; will always been in the main namespace unable to access your
+;; private functions. Later, when you're finishing up and want to test
+;; out your namespace, make sure your code is unloaded from Emacs
+;; (i.e. none of your symbols is in the symbol table) before applying
+;; your namespace. The same applies to compilation: the package must
+;; not be loaded before compilation or the `defpackage' will not hide
+;; any symbols.
+
+;; See example.el for an example of using this package.
 
 ;;; Code:
 
 (require 'cl)
 
-;; Dummy call to force autoload.
+;; Dummy call to force autoload of cl-seq.
 (remove-if-not 'identity ())
 
 (defun atom-list (&optional ob)

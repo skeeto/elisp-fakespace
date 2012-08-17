@@ -8,13 +8,13 @@
 
 ;;; Commentary:
 
-;; See example.el for an example of using this package.
-
 ;; Provides fake namespaces through a very rudimentary `defpackage',
 ;; familiar to Common Lisp users. The developer declares which symbols
 ;; are to be exported outside the package. All other symbols are
 ;; hidden away (by `end-package') where no other package can trample
 ;; on them.
+
+;; See example.el for an example of using this package.
 
 ;; It works by comparing the symbol table before any declarations to
 ;; the symbol table afterward, then uninterning any symbols that were

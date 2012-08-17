@@ -57,8 +57,8 @@ that are in B and not A."
   (let ((diff))
     (while (and (not (null a)) (not (null b)))
       (while (not (eq (car a) (car b)))
-	(push (car b) diff)
-	(setq b (cdr b)))
+        (push (car b) diff)
+        (setq b (cdr b)))
       (setq a (cdr a))
       (setq b (cdr b)))
     diff))
@@ -67,15 +67,15 @@ that are in B and not A."
   (defmacro defpackage (name &rest args)
     (dolist (arg args)
       (let ((type (car arg)))
-	(cond ((eq type :exports) t) ; interning the symbols is enough
-	      ((eq type :use) (mapcar (lambda (s) (require s)) (cdr arg))))))
+        (cond ((eq type :exports) t) ; interning the symbols is enough
+              ((eq type :use) (mapcar (lambda (s) (require s)) (cdr arg))))))
     (setq old-obarray (atom-list))
     `(provide (quote ,name)))
 
   (defmacro end-package ()
     (cons 'progn
-	  (mapcar (lambda (s) `(unintern (quote ,s) nil))
-		  (atom-difference old-obarray (atom-list))))))
+          (mapcar (lambda (s) `(unintern (quote ,s) nil))
+                  (atom-difference old-obarray (atom-list))))))
 
 (provide 'fakespace)
 

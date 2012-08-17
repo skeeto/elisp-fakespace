@@ -68,7 +68,7 @@ items that are in B and not A."
     (dolist (arg args)
       (let ((type (car arg)))
         (cond ((eq type :exports) t) ; interning the symbols is enough
-              ((eq type :use) (mapcar (lambda (s) (require s)) (cdr arg))))))
+              ((eq type :use) (mapc (lambda (s) (require s)) (cdr arg))))))
     (setq old-obarray (fakespace--atom-list))
     `(provide (quote ,name)))
 

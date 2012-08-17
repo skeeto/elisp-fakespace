@@ -29,11 +29,14 @@
 ;; not be loaded before compilation or the `defpackage' will not hide
 ;; any symbols.
 
-;; I still think it is possible to support `in-package' here. When
-;; symbols are uninterned, they could also be stored in a package
-;; symbol table. When switching packages, the old symbol table's
-;; symbols are uninterned and the new symbols are loaded in. I may add
-;; this in the future.
+;; Unfortunately, due to the downright ugly implementation of obarrays
+;; in Emacs, it's currently not possible to implement
+;; `in-package'. Uninterned symbols cannot be added back to the global
+;; obarray (or any other obarray). Symbols are invisibly chained as
+;; linked lists in the obarray so it's not possible to put a symbol
+;; into two obarrays at the same time -- the chains would
+;; conflict. Not only is the required functionality not provided
+;; (intentionally), trying to hack it in would break everything.
 
 ;;; Code:
 

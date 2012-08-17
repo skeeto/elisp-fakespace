@@ -44,11 +44,6 @@
 
 ;;; Code:
 
-(require 'cl)
-
-;; Dummy call to force autoload of cl-seq.
-(remove-if-not 'identity ())
-
 (defun atom-list (&optional ob)
   "Return given obarray OB as a list. Defaults to obarray."
   (let ((lst ()))
@@ -68,7 +63,7 @@ that are in B and not A."
       (setq b (cdr b)))
     diff))
 
-(lexical-let ((old-obarray ()))
+(let ((old-obarray ()))
   (defmacro defpackage (name &rest args)
     (dolist (arg args)
       (let ((type (car arg)))

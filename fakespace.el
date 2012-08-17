@@ -1,6 +1,10 @@
-;;; fakespace.el --- fake Emacs lisp namespaces
+;;; fakespace.el --- fake Emacs lisp namespaces -*- lexical-binding: t; -*-
 
 ;; This is free and unencumbered software released into the public domain.
+
+;; Author: Christopher Wellons <mosquitopsu@gmail.com>
+;; URL: https://github.com/skeeto/elisp-fakespace
+;; Version: 1.0
 
 ;;; Commentary:
 
@@ -79,3 +83,5 @@ that are in B and not A."
 		  (atom-difference old-obarray (atom-list))))))
 
 (provide 'fakespace)
+
+;;; fakespace.el ends here

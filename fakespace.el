@@ -44,16 +44,16 @@
 
 ;;; Code:
 
-(defun atom-list (&optional ob)
+(defun fakespace--atom-list (&optional ob)
   "Return given obarray OB as a list. Defaults to obarray."
   (let ((lst ()))
     (mapatoms (lambda (s) (push s lst)) ob)
     lst))
 
-(defun atom-difference (a b)
+(defun fakespace--atom-difference (a b)
   "Like set-difference, but, for performance reasons, requires
-specially formed lists (i.e. from `atom-list'). Returns items
-that are in B and not A."
+specially formed lists (i.e. from `fakespace--atom-list'). Returns
+items that are in B and not A."
   (let ((diff))
     (while (and (not (null a)) (not (null b)))
       (while (not (eq (car a) (car b)))
@@ -69,13 +69,14 @@ that are in B and not A."
       (let ((type (car arg)))
         (cond ((eq type :exports) t) ; interning the symbols is enough
               ((eq type :use) (mapcar (lambda (s) (require s)) (cdr arg))))))
-    (setq old-obarray (atom-list))
+    (setq old-obarray (fakespace--atom-list))
     `(provide (quote ,name)))
 
   (defmacro end-package ()
     (cons 'progn
           (mapcar (lambda (s) `(unintern (quote ,s) nil))
-                  (atom-difference old-obarray (atom-list))))))
+                  (fakespace--atom-difference old-obarray
+                                             (fakespace--atom-list))))))
 
 (provide 'fakespace)
 

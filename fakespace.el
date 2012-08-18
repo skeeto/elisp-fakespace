@@ -1,4 +1,4 @@
-;;; fakespace.el --- fake Emacs lisp namespaces -*- lexical-binding: t; -*-
+;;; fakespace.el --- fake namespaces with defpackage
 
 ;; This is free and unencumbered software released into the public domain.
 
@@ -63,20 +63,22 @@ items that are in B and not A."
       (setq b (cdr b)))
     diff))
 
-(let ((old-obarray ()))
-  (defmacro defpackage (name &rest args)
-    (dolist (arg args)
-      (let ((type (car arg)))
-        (cond ((eq type :exports) t) ; interning the symbols is enough
-              ((eq type :use) (mapc (lambda (s) (require s)) (cdr arg))))))
-    (setq old-obarray (fakespace--atom-list))
-    `(provide (quote ,name)))
+(defvar fakespace--obarray ()
+  "Snapshot of the obarray before interning the package's symbols.")
 
-  (defmacro end-package ()
-    (cons 'progn
-          (mapcar (lambda (s) `(unintern (quote ,s) nil))
-                  (fakespace--atom-difference old-obarray
-                                             (fakespace--atom-list))))))
+(defmacro defpackage (name &rest args)
+  (dolist (arg args)
+    (let ((type (car arg)))
+      (cond ((eq type :exports) t) ; interning the symbols is enough
+            ((eq type :use) (mapc (lambda (s) (require s)) (cdr arg))))))
+  (setq fakespace--obarray (fakespace--atom-list) )
+  `(provide (quote ,name)))
+
+(defmacro end-package ()
+  (cons 'progn
+        (mapcar (lambda (s) `(unintern (quote ,s) nil))
+                (fakespace--atom-difference fakespace--obarray
+                                            (fakespace--atom-list)))))
 
 (provide 'fakespace)
 
